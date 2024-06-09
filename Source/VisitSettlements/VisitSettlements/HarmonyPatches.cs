@@ -201,19 +201,25 @@ internal static class VS_SettlementDefeatUtility_CheckDefeated
 			return false;
 		}
 
-		if (worldComponent != null && worldComponent.settlementMapParents.ContainsKey(factionBase.Tile))
-		{
-			ClearData(factionBase);
-		}
 
 		return true;
 	}
 
 	private static void ClearData(Settlement factionBase)
 	{
-		worldComponent.settlementItems.RemoveWhere(item => item?.Map == factionBase.Map);
-		worldComponent.settlementStructures.RemoveAll(building => building?.Map == factionBase.Map);
-		worldComponent.settlementMaps.Remove(factionBase.Tile);
+		if (worldComponent.settlementItems != null)
+		{
+			worldComponent.settlementItems.RemoveWhere(item => item?.Map == factionBase.Map);
+		}
+		if (worldComponent.settlementStructures != null)
+		{
+			worldComponent.settlementStructures.RemoveAll(building => building?.Map == factionBase.Map);
+		}
+		if (worldComponent.settlementMaps != null)
+		{
+			worldComponent.settlementMaps.Remove(factionBase.Tile);
+		}
+
 		worldComponent.settlementMapParents.Remove(factionBase.Tile);
 
 		VS_BedOwnershipTracker bedTracker = Find.World.GetComponent<VS_BedOwnershipTracker>();
