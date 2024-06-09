@@ -1,0 +1,8 @@
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\VehicleFrameworkCompat\Assemblies\VehicleFrameworkCompat.dll
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.csproj.CoreCompileInputs.cache
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.dll
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.csproj.AssemblyReference.cache
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\VehicleFrameworkCompat\Assemblies\VehicleFrameworkCompat.dll
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.csproj.AssemblyReference.cache
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.csproj.CoreCompileInputs.cache
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\VehicleFrameworkCompat\Source\VehicleFrameworkCompat\VehicleFrameworkCompat\obj\Debug\VehicleFrameworkCompat.dll
