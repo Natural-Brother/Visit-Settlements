@@ -194,26 +194,21 @@ public static class VS_GetCaravanGizmos
 [HarmonyPatch(typeof(SettlementDefeatUtility), "CheckDefeated")]
 internal static class VS_SettlementDefeatUtility_CheckDefeated
 {
-	private static int tickCounter = 0;
+	private static int tickCounter = GenDate.TicksPerHour;
 
 	private static WorldComponent_SettlementData worldComponent;
-
-	static VS_SettlementDefeatUtility_CheckDefeated()
-	{
-		worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
-	}
 
 	private static bool Prefix(Settlement factionBase)
 	{
 		tickCounter++;
 
-		if (tickCounter >= GenDate.TicksPerHour * 6)
+		if (tickCounter >= GenDate.TicksPerHour)
 		{
 			worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
 			tickCounter = 0;
 		}
 
-		if (worldComponent == null || worldComponent.settlementMapParents == null)
+		if (factionBase?.Faction == null || worldComponent?.settlementMapParents == null || worldComponent.settlementMaps == null)
 		{
 			return true;
 		}
@@ -229,21 +224,20 @@ internal static class VS_SettlementDefeatUtility_CheckDefeated
 		}
 
 		var map = factionBase.Map;
-
-		if (worldComponent != null)
+		if (map == null)
 		{
-			worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+			return true;
+		}
 
-			worldComponent.settlementItems.RemoveWhere(item => item?.Map == map);
-			worldComponent.settlementStructures.RemoveAll(building => building?.Map == map);
-			worldComponent.settlementMaps.Remove(factionBase.Tile);
-			worldComponent.settlementMapParents.Remove(factionBase.Tile);
+		worldComponent.settlementItems.RemoveWhere(item => item?.Map == map);
+		worldComponent.settlementStructures.RemoveAll(building => building?.Map == map);
+		worldComponent.settlementMaps.Remove(factionBase.Tile);
+		worldComponent.settlementMapParents.Remove(factionBase.Tile);
 
-			var bedTracker = Find.World.GetComponent<VS_BedOwnershipTracker>();
-			if (bedTracker != null && bedTracker.bedExpirations != null)
-			{
-				bedTracker.bedExpirations.RemoveAll(beds => beds.Key?.Map == map);
-			}
+		var bedTracker = Find.World.GetComponent<VS_BedOwnershipTracker>();
+		if (bedTracker?.bedExpirations != null)
+		{
+			bedTracker.bedExpirations.RemoveAll(beds => beds.Key?.Map == map);
 		}
 
 		return true;
