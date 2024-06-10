@@ -3,6 +3,7 @@ using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -42,60 +43,71 @@ public static class VS_GetCaravanGizmos
 			{
 				LongEventHandler.QueueLongEvent(delegate
 				{
-					var worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
-
-					if (worldComponent.settlementMaps.ContainsKey(__instance.Tile))
+					try
 					{
-						var existingMap = worldComponent.settlementMaps[__instance.Tile];
+						var worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
 
-						CaravanEnterMapUtility.Enter(caravan, existingMap, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop);
-						CameraJumper.TryJump(new GlobalTargetInfo(existingMap.Center, existingMap));
-						return;
-					}
-
-					MapParent mapParent = Find.WorldObjects.MapParentAt(__instance.Tile);
-
-					worldComponent.settlementMapParents.Add(mapParent.Tile, mapParent);
-
-					mapParent = worldComponent.settlementMapParents[mapParent.Tile];
-
-					var map = GetOrGenerateMapUtility.GetOrGenerateMap(mapParent.Tile, null);
-
-					worldComponent.settlementMaps.Add(mapParent.Tile, map);
-
-					var inventoryItems = new HashSet<ThingWithComps>();
-					var colonists = map.mapPawns.FreeColonists;
-					foreach (var colonist in colonists)
-					{
-						foreach (var item in colonist.inventory.innerContainer)
+						if (worldComponent.settlementMaps.ContainsKey(__instance.Tile))
 						{
-							inventoryItems.Add(item as ThingWithComps);
+							var existingMap = worldComponent.settlementMaps[__instance.Tile];
+
+							CaravanEnterMapUtility.Enter(caravan, existingMap, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop);
+							CameraJumper.TryJump(new GlobalTargetInfo(existingMap.Center, existingMap));
+							return;
 						}
-					}
 
-					var items = map.listerThings.AllThings
-						.OfType<ThingWithComps>()
-						.Where(t => t.def.category == ThingCategory.Item || t.def.category == ThingCategory.Building && t.def.Minifiable && !inventoryItems.Contains(t))
-						.ToHashSet();
-					worldComponent.settlementItems.UnionWith(items);
+						MapParent mapParent = Find.WorldObjects.MapParentAt(__instance.Tile);
 
-					foreach (var item in items)
-					{
-						if (item.def.category == ThingCategory.Item)
+						worldComponent.settlementMapParents.Add(mapParent.Tile, mapParent);
+
+						mapParent = worldComponent.settlementMapParents[mapParent.Tile];
+
+						var map = GetOrGenerateMapUtility.GetOrGenerateMap(mapParent.Tile, null);
+
+						worldComponent.settlementMaps.Add(mapParent.Tile, map);
+
+						var inventoryItems = new HashSet<ThingWithComps>();
+						var colonists = map.mapPawns.FreeColonists;
+						foreach (var colonist in colonists)
 						{
-							item.SetForbidden(true, warnOnFail: false);
+							foreach (var item in colonist.inventory.innerContainer)
+							{
+								inventoryItems.Add(item as ThingWithComps);
+							}
 						}
+
+						var items = map.listerThings.AllThings
+							.OfType<ThingWithComps>()
+							.Where(t => t.def.category == ThingCategory.Item || t.def.category == ThingCategory.Building && t.def.Minifiable && !inventoryItems.Contains(t))
+							.ToHashSet();
+						worldComponent.settlementItems.UnionWith(items);
+
+						foreach (var item in items)
+						{
+							if (item.def.category == ThingCategory.Item)
+							{
+								item.SetForbidden(true, warnOnFail: false);
+							}
+						}
+
+						Unfog(map);
+						MakeHomeArea(map, __instance);
+						MakeStructures(map);
+
+						mapParent.GetComponent<TimedDetectionRaids>().ResetCountdown();
+
+						CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop);
+
+						CameraJumper.TryJump(new GlobalTargetInfo(map.Center, map));
 					}
+					catch (Exception ex)
+					{
+						Log.Error("[Visit Settlements] Exception occurred while entering settlement: " + ex);
 
-					Unfog(map);
-					MakeHomeArea(map, __instance);
-					MakeStructures(map);
-
-					mapParent.GetComponent<TimedDetectionRaids>().ResetCountdown();
-
-					CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop);
-
-					CameraJumper.TryJump(new GlobalTargetInfo(map.Center, map));
+						var worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+						worldComponent.settlementMaps.Remove(__instance.Tile);
+						worldComponent.settlementMapParents.Remove(__instance.Tile);
+					}
 				}, "GeneratingMapForNewEncounter", false, null);
 			}
 		};
@@ -182,51 +194,59 @@ public static class VS_GetCaravanGizmos
 [HarmonyPatch(typeof(SettlementDefeatUtility), "CheckDefeated")]
 internal static class VS_SettlementDefeatUtility_CheckDefeated
 {
-	private static int tickCounter = Find.TickManager.TicksGame * GenDate.TicksPerHour;
-	private static WorldComponent_SettlementData worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+	private static int tickCounter = 0;
+
+	private static WorldComponent_SettlementData worldComponent;
+
+	static VS_SettlementDefeatUtility_CheckDefeated()
+	{
+		worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+	}
 
 	private static bool Prefix(Settlement factionBase)
 	{
 		tickCounter++;
 
-		if (tickCounter >= Find.TickManager.TicksGame * GenDate.TicksPerHour)
+		if (tickCounter >= GenDate.TicksPerHour * 6)
 		{
 			worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
-
 			tickCounter = 0;
 		}
-		
+
+		if (worldComponent == null || worldComponent.settlementMapParents == null)
+		{
+			return true;
+		}
+
+		if (!worldComponent.settlementMapParents.TryGetValue(factionBase.Tile, out var parent))
+		{
+			return true;
+		}
+
 		if (!factionBase.Faction.HostileTo(Faction.OfPlayer))
 		{
 			return false;
 		}
 
+		var map = factionBase.Map;
+
+		if (worldComponent != null)
+		{
+			worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+
+			worldComponent.settlementItems.RemoveWhere(item => item?.Map == map);
+			worldComponent.settlementStructures.RemoveAll(building => building?.Map == map);
+			worldComponent.settlementMaps.Remove(factionBase.Tile);
+			worldComponent.settlementMapParents.Remove(factionBase.Tile);
+
+			var bedTracker = Find.World.GetComponent<VS_BedOwnershipTracker>();
+			if (bedTracker != null && bedTracker.bedExpirations != null)
+			{
+				bedTracker.bedExpirations.RemoveAll(beds => beds.Key?.Map == map);
+			}
+		}
 
 		return true;
-	}
-
-	private static void ClearData(Settlement factionBase)
-	{
-		if (worldComponent.settlementItems != null)
-		{
-			worldComponent.settlementItems.RemoveWhere(item => item?.Map == factionBase.Map);
-		}
-		if (worldComponent.settlementStructures != null)
-		{
-			worldComponent.settlementStructures.RemoveAll(building => building?.Map == factionBase.Map);
-		}
-		if (worldComponent.settlementMaps != null)
-		{
-			worldComponent.settlementMaps.Remove(factionBase.Tile);
-		}
-
-		worldComponent.settlementMapParents.Remove(factionBase.Tile);
-
-		VS_BedOwnershipTracker bedTracker = Find.World.GetComponent<VS_BedOwnershipTracker>();
-		if (bedTracker != null && bedTracker.bedExpirations != null && bedTracker.bedExpirations.Any())
-		{
-			bedTracker.bedExpirations.RemoveAll(beds => beds.Key?.Map == factionBase.Map);
-		}
 	}
 }
 
