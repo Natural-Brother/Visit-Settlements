@@ -4,5 +4,5 @@ F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\Source\VisitSet
 F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements\Source\VisitSettlements\VisitSettlements\obj\Debug\VisitSettlements.csproj.AssemblyReference.cache
 F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Source\VisitSettlements\VisitSettlements\obj\Debug\VisitSettlements.csproj.AssemblyReference.cache
 F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Source\VisitSettlements\VisitSettlements\obj\Debug\VisitSettlements.csproj.CoreCompileInputs.cache
-F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Assemblies\`.dll
-F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Source\VisitSettlements\VisitSettlements\obj\Debug\`.dll
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Assemblies\VisitSettlements.dll
+F:\SteamLibrary\steamapps\common\RimWorld\Mods\Visit Settlements2\Source\VisitSettlements\VisitSettlements\obj\Debug\VisitSettlements.dll
