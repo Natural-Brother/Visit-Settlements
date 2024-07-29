@@ -194,9 +194,14 @@ public static class VS_GetCaravanGizmos
 [HarmonyPatch(typeof(SettlementDefeatUtility), "CheckDefeated")]
 internal static class VS_SettlementDefeatUtility_CheckDefeated
 {
-	private static int tickCounter = GenDate.TicksPerHour;
+	private static int tickCounter = 0;
 
 	private static WorldComponent_SettlementData worldComponent;
+
+	static VS_SettlementDefeatUtility_CheckDefeated()
+	{
+		worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
+	}
 
 	private static bool Prefix(Settlement factionBase)
 	{

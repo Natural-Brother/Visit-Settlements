@@ -66,7 +66,15 @@ public class VS_WorldComponent_SettlementEvents : WorldComponent
                 .Where(p =>  p != null && p.Faction != null && !p.Faction.IsPlayer && !p.Faction.HostileTo(Faction.OfPlayer))
                 .ToList();
 
-            float totalNutritionNeeded = allyPawns.Sum(pawn => pawn.needs.food.NutritionBetweenHungryAndFed * daysCount);
+            float totalNutritionNeeded = allyPawns.Sum(pawn => pawn.needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed) * 60000f * daysCount);
+
+            float existingNutrition = map.listerThings.ThingsOfDef(ThingDefOf.MealSimple)
+                .Where(thing => worldComponent.settlementItems.Contains(thing))
+                .Sum(thing => thing.def.ingestible.CachedNutrition);
+
+            totalNutritionNeeded = Mathf.Max(0f, totalNutritionNeeded - existingNutrition);
+
+            if (totalNutritionNeeded <= 0f) continue;
 
             float mealNutrition = ThingDefOf.MealSimple.ingestible.CachedNutrition;
             int mealCount = Mathf.RoundToInt(totalNutritionNeeded / mealNutrition);
@@ -158,7 +166,7 @@ public class VS_WorldComponent_SettlementEvents : WorldComponent
         Faction settlementFaction = map.ParentFaction;
 
         var hostileFactions = Find.FactionManager.AllFactionsListForReading
-            .Where(f => f != null && !f.defeated && !f.IsPlayer && !f.def.hidden && f.def.pawnGroupMakers != null && f.def.pawnGroupMakers.Count > 0 && f.HostileTo(Faction.OfPlayer) || f.HostileTo(settlementFaction))
+            .Where(f => f != null && !f.defeated && !f.IsPlayer && !f.def.hidden && f.def.pawnGroupMakers != null && f.def.pawnGroupMakers.Count > 0 && (f.HostileTo(Faction.OfPlayer) || f.HostileTo(settlementFaction)))
             .ToList();
 
         if (hostileFactions == null || hostileFactions.Count == 0) return false;
@@ -170,7 +178,7 @@ public class VS_WorldComponent_SettlementEvents : WorldComponent
             target = map,
             faction = randomHostileFaction,
             points = StorytellerUtility.DefaultThreatPointsNow(map),
-            raidStrategy = DefDatabase<RaidStrategyDef>.GetNamed("ImmediateAttack"),
+            raidStrategy = DefDatabase<RaidStrategyDef>.GetNamed("ImmediateAttack", true),
             raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn,
         };
 
