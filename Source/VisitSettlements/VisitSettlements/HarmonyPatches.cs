@@ -198,14 +198,6 @@ internal static class VS_SettlementDefeatUtility_CheckDefeated
 
 	private static WorldComponent_SettlementData worldComponent;
 
-	static VS_SettlementDefeatUtility_CheckDefeated()
-	{
-		if (Find.World.GetComponent<WorldComponent_SettlementData>() != null)
-		{
-			worldComponent = Find.World.GetComponent<WorldComponent_SettlementData>();
-		}
-	}
-
 	private static bool Prefix(Settlement factionBase)
 	{
 		tickCounter++;

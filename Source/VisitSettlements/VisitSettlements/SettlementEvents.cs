@@ -178,7 +178,7 @@ public class VS_WorldComponent_SettlementEvents : WorldComponent
             target = map,
             faction = randomHostileFaction,
             points = StorytellerUtility.DefaultThreatPointsNow(map),
-            raidStrategy = DefDatabase<RaidStrategyDef>.GetNamed("ImmediateAttack", true),
+            raidStrategy = RaidStrategyDefOf.ImmediateAttack,
             raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn,
         };
 
