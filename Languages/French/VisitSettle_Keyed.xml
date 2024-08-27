@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
   <!-- Gizmos -->
-  <VS_EnterSettlementLabel>Enter Settlement</VS_EnterSettlementLabel>
+  <VS_EnterSettlementLabel>Entrer dans la Colonie</VS_EnterSettlementLabel>
   <VS_EnterSettlementDesc>Entrer dans la colonie.</VS_EnterSettlementDesc>
   
   <VS_ReformCaravanLabel>Reformer la caravane</VS_ReformCaravanLabel>
@@ -46,19 +46,19 @@
   <VS_EnablePenalties>Activer les pénalités</VS_EnablePenalties>
   <VS_BasePenalty>Pénalité de Base: {0}</VS_BasePenalty>
   <VS_ScalingFactor>Facteur d'Adaptation: {0}</VS_ScalingFactor>
-  <VS_EnableStealingPenalty>Activer la Pénalités des Vols</VS_EnableStealingPenalty>
-  <VS_EnableDestructionPenalty>Activer les Pénalités de Destruction</VS_EnableDestructionPenalty>
-  <VS_EnableEncroachingPenalty>Activer les Pénalités d'Empiétements</VS_EnableEncroachingPenalty>
-  <VS_EnableMinifyingPenalty>Active les Pénalisations Minimisantes</VS_EnableMinifyingPenalty>
-  <VS_EnableCaravanPenalty>Activer les Pénalités de Vols de Caravanes</VS_EnableCaravanPenalty>
-  <VS_EnableMiningPenalty>Activer les Pénalités de Minage</VS_EnableMiningPenalty>
+  <VS_EnableStealingPenalty>Activer les Pénalités pour Vols</VS_EnableStealingPenalty>
+  <VS_EnableDestructionPenalty>Activer les Pénalités pour Destruction</VS_EnableDestructionPenalty>
+  <VS_EnableEncroachingPenalty>Activer les Pénalités pour Empiétements</VS_EnableEncroachingPenalty>
+  <VS_EnableMinifyingPenalty>Active les Pénalisations pour Désinstallations</VS_EnableMinifyingPenalty>
+  <VS_EnableCaravanPenalty>Activer les Pénalités pour Vols de Caravanes</VS_EnableCaravanPenalty>
+  <VS_EnableMiningPenalty>Activer les Pénalités pour Minage</VS_EnableMiningPenalty>
   <VS_ResetSettings>réinitialiser les options</VS_ResetSettings>
-  <VS_BasePenaltyTooltip>Pénalités de Base: {0}. The base penalty value for goodwill.</VS_BasePenaltyTooltip>
+  <VS_BasePenaltyTooltip>Pénalités de Base: {0}. La pénalité de base pour les relations.</VS_BasePenaltyTooltip>
   <VS_ScalingFactorTooltip>Facteur d'Adaptation: {0}. Détermine comment la pénalité des vols changent par rapport à la pénalité de base. (dépendant du prix de base de l'objet sur le marché)</VS_ScalingFactorTooltip>
   <VS_EnableStealingPenaltyTooltip>Activer ou désactiver les pénalités pour le vols (sur la carte)</VS_EnableStealingPenaltyTooltip>
   <VS_EnableDestructionPenaltyTooltip>Activer ou désactiver les pénalités pour la destruction.</VS_EnableDestructionPenaltyTooltip>
   <VS_EnableEncroachingPenaltyTooltip>Activer ou désactiver les pénalités pour l'empiétements. (building)</VS_EnableEncroachingPenaltyTooltip>
-  <VS_EnableMinifyingPenaltyTooltip>Activer ou désactiver les pénalités pour la minimisation.</VS_EnableMinifyingPenaltyTooltip>
+  <VS_EnableMinifyingPenaltyTooltip>Activer ou désactiver les pénalités pour la désinstallation.</VS_EnableMinifyingPenaltyTooltip>
   <VS_EnableCaravanPenaltyTooltip>Activer ou désactiver la pénalité de sélection d'objet de la colonie en reformant la caravane.</VS_EnableCaravanPenaltyTooltip>
   <VS_EnableMiningPenaltyTooltip>Activer ou désactiver la pénalité de minage.</VS_EnableMiningPenaltyTooltip>
 
@@ -66,10 +66,10 @@
   <VS_EnableInteractionMenu>Activer le Menu d'Interaction</VS_EnableInteractionMenu>
   <VS_BaseBedCostPerDay>Prix de Base des lits par jours {0}</VS_BaseBedCostPerDay>
   <VS_BaseBedCostPerDayTooltip>prix de base des lits par jours.</VS_BaseBedCostPerDayTooltip>
-  <VS_MaxDaySelection>Selection maximum de jour de location {0}</VS_MaxDaySelection>
+  <VS_MaxDaySelection>Sélection maximum de jour de location {0}</VS_MaxDaySelection>
   <VS_MaxDaySelectionTooltip>le nombre maximum de jours que vous pouvez choisir pour louer.</VS_MaxDaySelectionTooltip>
-  <VS_RefundPercentage>Pourcentage de Remboursement {0}</VS_RefundPercentage>
-  <VS_RefundPercentageTooltip>Le pourcentage de remboursement maximum basé sur le nombre de jours avant expiration.</VS_RefundPercentageTooltip>
+  <VS_RefundPercentage>Pourcentage du Remboursement {0}</VS_RefundPercentage>
+  <VS_RefundPercentageTooltip>Le pourcentage du remboursement maximum basé sur le nombre de jours avant expiration.</VS_RefundPercentageTooltip>
   <VS_MaxItemQuantity>Quantité d'Objet Maximum {0}</VS_MaxItemQuantity>
   <VS_MaxItemQuantityTooltip>La quantité maximum d'objets que vous pouvez acheter.</VS_MaxItemQuantityTooltip>
   <VS_SelectTradeableItems>Choisissez les Objets Échangeables</VS_SelectTradeableItems>
